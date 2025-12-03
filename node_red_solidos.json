@@ -1,0 +1,711 @@
+[
+    {
+        "id": "0eee147a52b13bcc",
+        "type": "tab",
+        "label": "Fluxo 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "227b9af8f2570dea",
+        "type": "mqtt-broker",
+        "name": "MQTT_JAN",
+        "broker": "mqtt.janks.dev.br",
+        "port": "8883",
+        "tls": "",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": true,
+        "protocolVersion": "5",
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "09717cd09b4e43da",
+        "type": "postgreSQLConfig",
+        "name": "",
+        "host": "postgresql.janks.dev.br",
+        "hostFieldType": "str",
+        "port": 5432,
+        "portFieldType": "num",
+        "database": "projeto",
+        "databaseFieldType": "str",
+        "ssl": "true",
+        "sslFieldType": "bool",
+        "applicationName": "",
+        "applicationNameType": "str",
+        "max": 10,
+        "maxFieldType": "num",
+        "idle": 1000,
+        "idleFieldType": "num",
+        "connectionTimeout": 10000,
+        "connectionTimeoutFieldType": "num",
+        "user": "iot",
+        "userFieldType": "str",
+        "password": "pepcon-garton",
+        "passwordFieldType": "str"
+    },
+    {
+        "id": "6f4b21a40079f181",
+        "type": "telegram bot",
+        "botname": "Proj IOT",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "pollinterval": 300,
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": 6667,
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbothost": "0.0.0.0",
+        "localbotport": 8443,
+        "publicbotport": 8443,
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    },
+    {
+        "id": "181730abc866f14e",
+        "type": "websocket-listener",
+        "path": "/rfid",
+        "wholemsg": "false"
+    },
+    {
+        "id": "54c5d4678423c6e1",
+        "type": "mqtt in",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "topic": "cafeteria_iot",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "227b9af8f2570dea",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 120,
+        "wires": [
+            [
+                "b2b7abe7086dc5e8"
+            ]
+        ]
+    },
+    {
+        "id": "695d8ec210932281",
+        "type": "postgresql",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "query": "INSERT INTO transacoes_cafeteria(\"id_user\", \"id_produto\", \"peso_em_g\", \"valor\") VALUES\n($id_user, $id_produto, $peso, $total);\n",
+        "postgreSQLConfig": "09717cd09b4e43da",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 790,
+        "y": 180,
+        "wires": [
+            [
+                "ba3629c3916f7a08"
+            ]
+        ]
+    },
+    {
+        "id": "b2b7abe7086dc5e8",
+        "type": "change",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload",
+                "pt": "msg",
+                "to": "queryParameters",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 520,
+        "y": 120,
+        "wires": [
+            [
+                "695d8ec210932281",
+                "c7761920a3589196",
+                "6d6b57e6fdc3e226"
+            ]
+        ]
+    },
+    {
+        "id": "338a75ee91afce6d",
+        "type": "mqtt in",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "topic": "verifica_usuario_cafe",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "227b9af8f2570dea",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 200,
+        "y": 480,
+        "wires": [
+            [
+                "e4a88b0ace9a4e68"
+            ]
+        ]
+    },
+    {
+        "id": "e71a377b16ab42d1",
+        "type": "postgresql",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "query": "SELECT * FROM users_cafeteria WHERE rfid = $rfid;",
+        "postgreSQLConfig": "09717cd09b4e43da",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 715,
+        "y": 480,
+        "wires": [
+            [
+                "6d0b3f7617fe2a58"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "e4a88b0ace9a4e68",
+        "type": "change",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload",
+                "pt": "msg",
+                "to": "queryParameters",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 500,
+        "y": 480,
+        "wires": [
+            [
+                "e71a377b16ab42d1"
+            ]
+        ]
+    },
+    {
+        "id": "6d0b3f7617fe2a58",
+        "type": "switch",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "empty"
+            },
+            {
+                "t": "nempty"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 910,
+        "y": 480,
+        "wires": [
+            [
+                "b022d31f8b0b328b"
+            ],
+            [
+                "1a6a0f076c00f3ca"
+            ]
+        ]
+    },
+    {
+        "id": "0dd48be288e60bf2",
+        "type": "mqtt out",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "topic": "retorna_usuario_cafe",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "227b9af8f2570dea",
+        "x": 1500,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "1a6a0f076c00f3ca",
+        "type": "change",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload[0]",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1160,
+        "y": 540,
+        "wires": [
+            [
+                "0dd48be288e60bf2"
+            ]
+        ]
+    },
+    {
+        "id": "b022d31f8b0b328b",
+        "type": "change",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"id\":0}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1170,
+        "y": 420,
+        "wires": [
+            [
+                "0dd48be288e60bf2"
+            ]
+        ]
+    },
+    {
+        "id": "c7761920a3589196",
+        "type": "debug",
+        "z": "0eee147a52b13bcc",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "ba3629c3916f7a08",
+        "type": "debug",
+        "z": "0eee147a52b13bcc",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 960,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "6d6b57e6fdc3e226",
+        "type": "postgresql",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "query": "UPDATE users_cafeteria SET balance = $saldoAtual;   ",
+        "postgreSQLConfig": "09717cd09b4e43da",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 790,
+        "y": 100,
+        "wires": [
+            [
+                "9cd583adfa5b0ab7"
+            ]
+        ]
+    },
+    {
+        "id": "9cd583adfa5b0ab7",
+        "type": "debug",
+        "z": "0eee147a52b13bcc",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 980,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "a5ba9dbe866bea83",
+        "type": "mqtt in",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "topic": "pega_produtos_cafe",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "227b9af8f2570dea",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 760,
+        "wires": [
+            [
+                "721c5e0c1e1dc90a"
+            ]
+        ]
+    },
+    {
+        "id": "721c5e0c1e1dc90a",
+        "type": "postgresql",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "query": "SELECT * FROM produtos_cafeteria;",
+        "postgreSQLConfig": "09717cd09b4e43da",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 435,
+        "y": 760,
+        "wires": [
+            [
+                "f19a557255e25b45",
+                "69d7e3a0ae103530"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "f19a557255e25b45",
+        "type": "debug",
+        "z": "0eee147a52b13bcc",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "69d7e3a0ae103530",
+        "type": "mqtt out",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "topic": "retorna_produtos_cafe",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "227b9af8f2570dea",
+        "x": 675,
+        "y": 760,
+        "wires": [],
+        "l": false
+    },
+    {
+        "id": "d917c495471036c8",
+        "type": "mqtt in",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "topic": "estoque_baixo_cafe",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "227b9af8f2570dea",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 1100,
+        "wires": [
+            [
+                "0a1a21446783f7c2"
+            ]
+        ]
+    },
+    {
+        "id": "5f1b3152e2b76925",
+        "type": "switch",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 700,
+        "y": 1100,
+        "wires": [
+            [
+                "1b6d7b2d34d71e61"
+            ],
+            [
+                "e1d026f9f225b117"
+            ]
+        ]
+    },
+    {
+        "id": "1b6d7b2d34d71e61",
+        "type": "template",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{\n    \"content\": \"Baixo estoque de Amendoim!!\", \n    \"chatId\": \"8256628211\", \n    \"type\": \"message\"\n}",
+        "output": "json",
+        "x": 930,
+        "y": 1040,
+        "wires": [
+            [
+                "9cf75c00bc9b23a4"
+            ]
+        ]
+    },
+    {
+        "id": "0a1a21446783f7c2",
+        "type": "change",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.produto",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 400,
+        "y": 1100,
+        "wires": [
+            [
+                "5f1b3152e2b76925"
+            ]
+        ]
+    },
+    {
+        "id": "e1d026f9f225b117",
+        "type": "template",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{\n    \"content\": \"Baixo estoque de M&M!!\", \n    \"chatId\": \"8256628211\", \n    \"type\": \"message\"\n}",
+        "output": "json",
+        "x": 920,
+        "y": 1160,
+        "wires": [
+            [
+                "9cf75c00bc9b23a4"
+            ]
+        ]
+    },
+    {
+        "id": "d8fc8a74f80c5377",
+        "type": "debug",
+        "z": "0eee147a52b13bcc",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1160,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "9cf75c00bc9b23a4",
+        "type": "telegram sender",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "bot": "6f4b21a40079f181",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1160,
+        "y": 1080,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "12e1b027a943cbd1",
+        "type": "mqtt in",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "topic": "novo_rfid",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "227b9af8f2570dea",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 1360,
+        "wires": [
+            [
+                "26cb820c896edd4f"
+            ]
+        ]
+    },
+    {
+        "id": "26cb820c896edd4f",
+        "type": "function",
+        "z": "0eee147a52b13bcc",
+        "name": "function 1",
+        "func": "\nreturn {\n    payload: msg.payload\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 1360,
+        "wires": [
+            [
+                "e50cdc90b38b30b9",
+                "8ec0aab65811872b"
+            ]
+        ]
+    },
+    {
+        "id": "e50cdc90b38b30b9",
+        "type": "websocket out",
+        "z": "0eee147a52b13bcc",
+        "name": "",
+        "server": "181730abc866f14e",
+        "client": "",
+        "x": 560,
+        "y": 1360,
+        "wires": []
+    },
+    {
+        "id": "8ec0aab65811872b",
+        "type": "debug",
+        "z": "0eee147a52b13bcc",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 1480,
+        "wires": []
+    },
+    {
+        "id": "4f4c5dc616db3bc1",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-postgresql": "0.15.4",
+            "node-red-contrib-telegrambot": "16.4.0"
+        }
+    }
+]
