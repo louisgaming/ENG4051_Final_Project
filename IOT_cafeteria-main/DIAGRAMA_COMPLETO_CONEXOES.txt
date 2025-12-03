@@ -1,0 +1,341 @@
+================================================================================
+           DIAGRAMA COMPLETO DE CONEXÕES - SISTEMA DE LÍQUIDOS
+                    ESP32-WROOM-32 IoT Cafeteria
+================================================================================
+
+                          ┌─────────────────────────┐
+                          │   ESP32-WROOM-32        │
+                          │                         │
+                          │  ┌──────────────────┐   │
+         ┌────────────────┼──┤ GPIO 5           │   │
+         │                │  │ GPIO 12          ├───┼────────────┐
+         │    ┌───────────┼──┤ GPIO 13          │   │            │
+         │    │           │  │ GPIO 14          ├───┼─────────┐  │
+         │    │       ┌───┼──┤ GPIO 15          │   │         │  │
+         │    │       │   │  │ GPIO 16          ├───┼──────┐  │  │
+         │    │       │   │  │ GPIO 17          ├───┼───┐  │  │  │
+         │    │       │   │  │ GPIO 18 (SCK)    ├───┼─┐ │  │  │  │
+         │    │       │   │  │ GPIO 19 (MISO)   ├───┼─┼─┼──┼──┼──┼─┐
+         │    │       │   │  │ GPIO 21          ├───┼─┼─┼──┼──┼──┼─┼─┐
+         │    │       │   │  │ GPIO 22          ├───┼─┼─┼──┼──┼──┼─┼─┼─┐
+         │    │       │   │  │ GPIO 23 (MOSI)   ├───┼─┼─┼──┼──┼──┼─┼─┼─┼─┐
+         │    │       │   │  │ GPIO 25          ├───┼─┼─┼──┼──┼──┼─┼─┼─┼─┼─┐
+         │    │       │   │  │ GPIO 26          ├───┼─┼─┼──┼──┼──┼─┼─┼─┼─┼─┼─┐
+         │    │       │   │  │ GPIO 27          ├───┼─┼─┼──┼──┼──┼─┼─┼─┼─┼─┼─┼─┐
+         │    │       │   │  │ GPIO 32          ├───┼─┼─┼──┼──┼──┼─┼─┼─┼─┼─┼─┼─┼─┐
+         │    │       │   │  │ GPIO 33          ├───┼─┼─┼──┼──┼──┼─┼─┼─┼─┼─┼─┼─┼─┼─┐
+         │    │       │   │  │ GPIO 46          ├───┼─┼─┼──┼──┼──┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┐
+         │    │       │   │  │                  │   │ │ │  │  │  │ │ │ │ │ │ │ │ │ │ │
+         │    │       │   │  │ 3.3V ────────────┼───┼─┼─┼──┼──┼──┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼──→ Alimentação
+         │    │       │   │  │ GND ─────────────┼───┼─┼─┼──┼──┼──┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼──→ Terra Comum
+         │    │       │   │  └──────────────────┘   │ │ │  │  │  │ │ │ │ │ │ │ │ │ │ │
+         │    │       │   └───────────────────────────────────────────────────────────┘
+         │    │       └───────────────────────────────────────────────────────────────┘
+         │    └───────────────────────────────────────────────────────────────────────┘
+         └────────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+                            CONEXÕES POR MÓDULO
+================================================================================
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 1. E-PAPER DISPLAY (Waveshare 2.9")                                       ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+    e-Paper HAT                  ESP32
+    ┌──────────┐
+    │ BUSY     │────────────────> GPIO 16  (Input - detecta ocupado)
+    │ RST      │<────────────────< GPIO 15  (Output - reset)
+    │ DC       │<────────────────< GPIO 14  (Output - data/command)
+    │ CS       │<────────────────< GPIO 5   (Output - chip select) ⚠️
+    │ CLK      │<────────────────< GPIO 18  (SPI Clock) [COMPARTILHADO]
+    │ DIN      │<────────────────< GPIO 23  (SPI MOSI) [COMPARTILHADO]
+    │ GND      │──────────────────> GND
+    │ VCC      │<────────────────< 3.3V    ⚠️ NÃO USAR 5V!
+    └──────────┘
+
+    ⚠️ GPIO 5 agora é exclusivo do e-Paper (corrigido de GPIO 10)
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 2. RFID RC522                                                              ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+    RFID RC522                   ESP32
+    ┌──────────┐
+    │ SDA (CS) │<────────────────< GPIO 46  (Output - chip select)
+    │ SCK      │<────────────────< GPIO 18  (SPI Clock) [COMPARTILHADO]
+    │ MOSI     │<────────────────< GPIO 23  (SPI MOSI) [COMPARTILHADO]
+    │ MISO     │>────────────────> GPIO 19  (SPI MISO)
+    │ IRQ      │  (não conectado)
+    │ GND      │──────────────────> GND
+    │ RST      │<────────────────< GPIO 17  (Output - reset)
+    │ 3.3V     │<────────────────< 3.3V
+    └──────────┘
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 3. BOTÕES (Interface do Usuário)                                          ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+    Botão LEFT                   ESP32
+    ┌──────────┐
+    │   BTN    │<────────────────< GPIO 25  (Input Pull-up)
+    └────┬─────┘
+         └───────────────────────> GND
+
+    Botão RIGHT                  ESP32
+    ┌──────────┐
+    │   BTN    │<────────────────< GPIO 32  (Input Pull-up)
+    └────┬─────┘
+         └───────────────────────> GND
+
+    Função: Selecionar produto (Café/Água) e tamanho (Pequeno/Médio)
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 4. MÓDULO DE RELÉS (2 Canais - Válvulas Solenoides)                       ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+    Módulo Relé                  ESP32         Válvulas
+    ┌──────────┐                              ┌─────────┐
+    │ IN1      │<────────────────< GPIO 33    │ Válvula │
+    │ COM1     │──────────────────────────────│  Café   │
+    │ NO1      │──────────────────────────────│  12V    │
+    │          │                              └─────────┘
+    │ IN2      │<────────────────< GPIO 26    ┌─────────┐
+    │ COM2     │──────────────────────────────│ Válvula │
+    │ NO2      │──────────────────────────────│  Água   │
+    │          │                              └─────────┘
+    │ VCC      │<────────────────< 5V (fonte externa)
+    │ GND      │──────────────────> GND
+    └──────────┘
+
+    ⚠️ Usar fonte externa 5V/12V (não alimentar pelo ESP32!)
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 5. SOLENOIDE DE TRAVAMENTO (Controle da Porta)                            ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+    Driver H-Bridge              ESP32         Solenoide
+    ┌──────────┐                              ┌─────────┐
+    │ IN1      │<────────────────< GPIO 27    │         │
+    │ IN2      │<────────────────< GPIO 12 ⚠️ │ Trava   │
+    │ OUT+     │──────────────────────────────│  12V    │
+    │ OUT-     │──────────────────────────────│         │
+    │ VCC      │<────────────────< 12V        └─────────┘
+    │ GND      │──────────────────> GND
+    └──────────┘
+
+    ⚠️ GPIO 12 requer resistor pull-down de 10kΩ (boot strapping)
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 6. SENSOR DE CONTATO DA PORTA                                             ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+    Reed Switch/Microswitch      ESP32
+    ┌──────────┐
+    │   CONT   │<────────────────< GPIO 13  (Input Pull-up)
+    └────┬─────┘
+         └───────────────────────> GND
+
+    Função: Detecta se a porta está aberta ou fechada
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 7. SENSORES ULTRASSÔNICOS (Nível dos Reservatórios)                       ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+    HC-SR04 #1 (Café)            ESP32
+    ┌──────────┐
+    │ VCC      │<────────────────< 5V
+    │ TRIG     │<────────────────< GPIO 22  (Output)
+    │          │     ┌─────┐
+    │ ECHO     │>────┤ DIV │─────> GPIO 21  (Input) ⚠️
+    │          │     └─────┘
+    │ GND      │──────────────────> GND
+    └──────────┘
+             Divisor de Tensão 5V→3.3V
+             (Resistores: 1kΩ + 2kΩ)
+
+    HC-SR04 #2 (Água)            ESP32
+    ┌──────────┐
+    │ VCC      │<────────────────< 5V
+    │ TRIG     │<────────────────< GPIO 19  (Output) [COMPARTILHADO]
+    │          │     ┌─────┐
+    │ ECHO     │>────┤ DIV │─────> GPIO 18  (Input) ⚠️ [COMPARTILHADO]
+    │          │     └─────┘
+    │ GND      │──────────────────> GND
+    └──────────┘
+             Divisor de Tensão 5V→3.3V
+             (Resistores: 1kΩ + 2kΩ)
+
+    ⚠️ OBRIGATÓRIO: Divisor de tensão no ECHO (HC-SR04 retorna 5V!)
+    ⚠️ GPIO 18 e 19 são compartilhados com SPI (funciona, leitura no loop)
+
+
+================================================================================
+                        DIVISOR DE TENSÃO (HC-SR04 ECHO)
+================================================================================
+
+    Cada sensor ultrassônico precisa:
+
+         5V ECHO ───[R1: 1kΩ]───┬───[R2: 2kΩ]─── GND
+                                 │
+                                 └──────────────> ESP32 GPIO
+                                      (3.3V)
+
+    Montar 2x (um para cada sensor)
+
+
+================================================================================
+                          TABELA RESUMO DE CONEXÕES
+================================================================================
+
+┌──────┬─────────────────────┬────────────┬──────────────────────────────┐
+│ GPIO │ Função              │ Tipo       │ Conectado a                  │
+├──────┼─────────────────────┼────────────┼──────────────────────────────┤
+│  5   │ e-Paper CS          │ Output     │ e-Paper Chip Select          │
+│  12  │ Solenoide PIN2      │ Output     │ Driver H-Bridge IN2 ⚠️       │
+│  13  │ Sensor Porta        │ Input PU   │ Reed Switch/Microswitch      │
+│  14  │ e-Paper DC          │ Output     │ e-Paper Data/Command         │
+│  15  │ e-Paper RST         │ Output     │ e-Paper Reset                │
+│  16  │ e-Paper BUSY        │ Input      │ e-Paper Busy Signal          │
+│  17  │ RFID RST            │ Output     │ RFID Reset                   │
+│  18  │ SPI SCK / ECHO2     │ Shared     │ SPI + HC-SR04 #2 Echo        │
+│  19  │ SPI MISO / TRIG2    │ Shared     │ SPI + HC-SR04 #2 Trigger     │
+│  21  │ Ultrassônico ECHO1  │ Input      │ HC-SR04 #1 Echo (c/ divisor) │
+│  22  │ Ultrassônico TRIG1  │ Output     │ HC-SR04 #1 Trigger           │
+│  23  │ SPI MOSI            │ Output     │ SPI (RFID + e-Paper)         │
+│  25  │ Botão LEFT          │ Input PU   │ Botão Esquerdo               │
+│  26  │ Relé 2 (Água)       │ Output     │ Módulo Relé IN2              │
+│  27  │ Solenoide PIN1      │ Output     │ Driver H-Bridge IN1          │
+│  32  │ Botão RIGHT         │ Input PU   │ Botão Direito                │
+│  33  │ Relé 1 (Café)       │ Output     │ Módulo Relé IN1              │
+│  46  │ RFID CS             │ Output     │ RFID Chip Select             │
+└──────┴─────────────────────┴────────────┴──────────────────────────────┘
+
+Legenda:
+  PU = Pull-up interno ativado
+  ⚠️ = Requer atenção especial (ver observações)
+  Shared = Compartilhado com outro periférico
+
+
+================================================================================
+                            ALIMENTAÇÃO DO SISTEMA
+================================================================================
+
+    ESP32-WROOM-32:
+    ├─ VIN/5V  ──> 5V (fonte externa ou USB)
+    ├─ 3.3V    ──> Usado para: RFID, e-Paper
+    └─ GND     ──> Terra comum (OBRIGATÓRIO conectar todos!)
+
+    Fonte Externa 5V (2A mínimo):
+    ├─ 5V      ──> Módulo Relés VCC
+    ├─ 5V      ──> HC-SR04 #1 VCC
+    ├─ 5V      ──> HC-SR04 #2 VCC
+    └─ GND     ──> Terra comum
+
+    Fonte Externa 12V (2A mínimo):
+    ├─ 12V     ──> Driver H-Bridge (solenoide)
+    ├─ 12V     ──> Válvula Café (via relé)
+    ├─ 12V     ──> Válvula Água (via relé)
+    └─ GND     ──> Terra comum
+
+    ⚠️ IMPORTANTE: Todos os GNDs devem estar conectados!
+
+
+================================================================================
+                         COMPONENTES NECESSÁRIOS
+================================================================================
+
+Quantidade  │ Componente                        │ Observação
+────────────┼───────────────────────────────────┼──────────────────────────
+     1      │ ESP32-WROOM-32                    │ Microcontrolador
+     1      │ e-Paper 2.9" Waveshare            │ Display
+     1      │ RFID RC522                        │ Leitor de cartões
+     2      │ Botões tácteis                    │ Normalmente abertos
+     1      │ Módulo relé 2 canais 5V           │ Para válvulas
+     2      │ Válvulas solenoides 12V           │ Café e Água
+     1      │ Solenoide 12V + Driver H-Bridge   │ Travamento
+     1      │ Reed switch ou microswitch        │ Sensor de porta
+     2      │ HC-SR04                           │ Sensores ultrassônicos
+     4      │ Resistor 1kΩ                      │ Divisor tensão (2x)
+     4      │ Resistor 2kΩ                      │ Divisor tensão (2x)
+     1      │ Resistor 10kΩ                     │ Pull-down GPIO 12
+     1      │ Fonte 5V 2A                       │ ESP32, relés, sensores
+     1      │ Fonte 12V 2A                      │ Solenoide, válvulas
+     X      │ Jumpers/Fios                      │ Conexões
+────────────┴───────────────────────────────────┴──────────────────────────
+
+
+================================================================================
+                            OBSERVAÇÕES CRÍTICAS
+================================================================================
+
+⚠️  1. GPIO 12 (SOL_PIN2):
+       - Boot strapping pin (MTDI)
+       - OBRIGATÓRIO: Resistor pull-down de 10kΩ entre GPIO 12 e GND
+       - Sem pull-down, ESP32 pode não inicializar corretamente
+
+⚠️  2. HC-SR04 ECHO Pins:
+       - Divisor de tensão OBRIGATÓRIO (5V → 3.3V)
+       - Conectar 5V direto pode danificar o ESP32 permanentemente
+       - Montar circuito: 5V ─[1kΩ]─┬─[2kΩ]─GND, pegar 3.3V no meio
+
+⚠️  3. e-Paper VCC:
+       - Usar APENAS 3.3V
+       - NUNCA conectar em 5V (danifica o display)
+
+⚠️  4. Alimentação Externa:
+       - NÃO alimentar relés/válvulas pelo ESP32
+       - Usar fontes externas separadas
+       - Conectar TODOS os GNDs juntos (terra comum)
+
+⚠️  5. GPIO 5 (e-Paper CS):
+       - Corrigido de GPIO 10 (não acessível)
+       - GPIO 5 é boot strapping, mas funciona como OUTPUT
+
+⚠️  6. GPIO 18 e 19 Compartilhados:
+       - SPI usado na inicialização
+       - Ultrassônicos lidos no loop
+       - Não há conflito temporal
+
+
+================================================================================
+                          CHECKLIST DE MONTAGEM
+================================================================================
+
+□ 1.  Soldar headers nos módulos (ESP32, RFID, e-Paper, Relés)
+□ 2.  Montar divisores de tensão HC-SR04 (2x)
+□ 3.  Adicionar pull-down 10kΩ no GPIO 12
+□ 4.  Conectar e-Paper (6 pinos + VCC/GND)
+□ 5.  Conectar RFID (7 pinos + VCC/GND)
+□ 6.  Conectar botões (2x) com pull-up interno
+□ 7.  Conectar módulo relé (2 canais)
+□ 8.  Conectar válvulas aos relés
+□ 9.  Conectar solenoide ao driver H-Bridge
+□ 10. Conectar sensor de porta (reed switch)
+□ 11. Conectar HC-SR04 #1 (Café) com divisor
+□ 12. Conectar HC-SR04 #2 (Água) com divisor
+□ 13. Conectar alimentação 5V (ESP32, relés, sensores)
+□ 14. Conectar alimentação 12V (solenoide, válvulas)
+□ 15. ⚠️ VERIFICAR: Todos os GNDs conectados
+□ 16. ⚠️ VERIFICAR: e-Paper em 3.3V (não 5V!)
+□ 17. ⚠️ VERIFICAR: Divisores de tensão HC-SR04
+□ 18. ⚠️ VERIFICAR: Pull-down no GPIO 12
+□ 19. Fazer upload do código
+□ 20. Testar cada módulo individualmente
+□ 21. Testar fluxo completo
+
+
+================================================================================
+                              FIM DO DIAGRAMA
+================================================================================
+Arquivo: DIAGRAMA_COMPLETO_CONEXOES.txt
+Projeto: Sistema de Dispensação de Líquidos - ESP32
+Versão: 1.0 Final (GPIO 5 e GPIO 12 corrigidos)
+Data: 2025
+================================================================================

@@ -1,0 +1,23 @@
+<head>
+  <title>Update</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+  <h1>Update</h1>
+  <form method="post">
+    <div>
+      <label>usuario</label>
+      <input id="username" name = "username" value="{{username}}">
+    </div>
+
+    <div>
+      <label>senha</label>
+      <input id="password" name = "password" value="{{password}}">
+    </div>
+
+    <button type="submit">Update</button>
+  </form>
+  <a href="/list_adm">voltar</a>
+</body>

@@ -1,0 +1,9 @@
+<head>
+  <title>Confirma remoção</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<h1> Tem certeza que deseja remover {{ username }}</h1>
+
+<a href="/delete_adm/{{id}}">confirmar</a>
+<a href="/list_adm">cancelar</a>
