@@ -21,6 +21,15 @@ PCB schematics can be found here: https://oshwlab.com/siqueiraluizlb/iot-projeto
 
 ![PCB_back](https://raw.githubusercontent.com/louisgaming/ENG4051_Final_Project/refs/heads/main/README_images/PCB_back.svg)
 
+EPAPER:          WeAct 2.9" Epaper Module
+B1 and B2:       Push Button modules
+BALANCA:         HX711 load cell amplifier 
+RFID:            RC522 RFID module
+Ctt+ and Ctt-:   Door closure detection through a contact-based circuit 
+US1 and US2:     HC-SR04 Ultrasonic sensors 
+RL:              2-Channel Relay Module
+SR1 and SR2:     SG90 Servomotors 
+
 Originally, the Ctt+, Ctt−, RL, SR2, B2, and US2 pins were intended to enable two product options per dispenser and an automatic locking system. However, due to time constraints, the system had to be limited to a single-product dispenser. 
 
 # Project Video
