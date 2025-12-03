@@ -8,7 +8,40 @@ This project implements a solution for snacks and beverages dispensers, where an
 
 # MQTT
 
-# Node-Red
+In this project, MQTT is used as the communication layer between the ESP32 and the backend.  
+The ESP32 connects to the broker `mqtt.janks.dev.br` over TLS and exchanges JSON messages on a few fixed topics:
+
+- `verifica_usuario_cafe`: sent by the ESP32 when an RFID card is read, with the payload `{ "rfid": "<card_id>" }`, asking the backend to validate the user.  
+- `retorna_usuario_cafe`: response from the backend with the user object (id, name, balance) or `{ "id": 0 }` if the RFID is not registered.  
+- `pega_produtos_cafe`: request sent at startup so the backend can return the current product catalog.  
+- `retorna_produtos_cafe`: list of products (id, name, price per 100 g) used by the ESP32 to show the menu and calculate the price during weighing.  
+- `cafeteria_iot`: used by the ESP32 to send the finished purchase (`id_user`, `id_produto`, `peso`, `total`, `saldoAtual`) to the backend.  
+- `estoque_baixo_cafe`: sent when the ultrasonic sensors detect low stock, with `{ "produto": 1 }` for peanuts or `{ "produto": 2 }` for M&M’s.  
+- `novo_rfid`: used in admin mode to send a new RFID card to be registered on the web interface.
+
+All system events (RFID read, product selection, purchase confirmation and stock alerts) are therefore propagated to the backend through these MQTT channels.
+
+
+# Node-RED
+
+Node-RED acts as the integration layer between MQTT, the PostgreSQL database and external services.  
+Each MQTT topic is attached to a flow:
+
+- Messages on `verifica_usuario_cafe` are passed as SQL parameters to a query:  
+  `SELECT * FROM users_cafeteria WHERE rfid = $rfid;`  
+  The result is returned to the device through `retorna_usuario_cafe`.
+
+- Messages on `pega_produtos_cafe` trigger a query:  
+  `SELECT * FROM produtos_cafeteria;`  
+  The resulting product list is published on `retorna_produtos_cafe`.
+
+- Purchases received on `cafeteria_iot` are stored in the `transacoes_cafeteria` table and the user’s balance is updated in `users_cafeteria`.
+
+- Low-stock alerts on `estoque_baixo_cafe` are converted into text notifications and forwarded through a Telegram bot.
+
+- New RFIDs sent on `novo_rfid` are forwarded via WebSocket to a web page, where they can be associated with a user registration flow.
+
+With this setup, Node-RED centralizes the business logic, while the ESP32 focuses on hardware control and message transmission.
 
 # Data Base
 
