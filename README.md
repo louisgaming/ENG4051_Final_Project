@@ -15,9 +15,9 @@ This project implements a solution for snacks and beverages dispensers, where an
 # PCB
 PCB schematics can be found here: https://oshwlab.com/siqueiraluizlb/iot-projeto-final
 
-<img width="674" height="739" alt="image" src="https://github.com/user-attachments/assets/40a847bb-b342-4d2b-bf7e-0ecc9e876889" />
+![PCB_front](https://raw.githubusercontent.com/louisgaming/ENG4051_Final_Project/refs/heads/main/images/PCB_front.svg)
 
-<img width="675" height="739" alt="image" src="https://github.com/user-attachments/assets/e3690fad-3466-460e-82ee-fc0e56f2e0a8" />
+![PCB_back](https://raw.githubusercontent.com/louisgaming/ENG4051_Final_Project/refs/heads/main/images/PCB_back.svg)
 
 Originally, the Ctt+, Ctt−, RL, SR2, B2, and US2 pins were intended to enable two product options per dispenser and an automatic locking system. However, due to time constraints, the system had to be limited to a single-product dispenser. 
 
