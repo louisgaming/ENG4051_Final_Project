@@ -45,6 +45,14 @@ With this setup, Node-RED centralizes the business logic, while the ESP32 focuse
 
 # Data Base
 
+# Grafanna
+
+Grafana bisualizations of important data can be found here:
+
+- link to shared grafana (breaks because grafana doesn't support variables): https://gustavogm001.grafana.net/public-dashboards/852cb6763ca445c5bca0822fc30f2653
+
+- link to grafana with fixed variables: https://gustavogm001.grafana.net/dashboard/snapshot/2dvfy0RoR87vJqPKb1MvSyjfQxw9A4QK
+
 # PCB
 PCB schematics can be found here: https://oshwlab.com/siqueiraluizlb/iot-projeto-final
 
