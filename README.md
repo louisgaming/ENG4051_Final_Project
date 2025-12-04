@@ -45,6 +45,9 @@ With this setup, Node-RED centralizes the business logic, while the ESP32 focuse
 
 # Data Base
 
+<img width="928" height="434" alt="image" src="https://github.com/user-attachments/assets/c52a6e87-5cc8-4a9f-8023-a635caa99538" />
+
+
 # Grafana
 
 Grafana bisualizations of important data can be found here:
