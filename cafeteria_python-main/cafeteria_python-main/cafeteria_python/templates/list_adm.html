@@ -1,0 +1,33 @@
+<head>
+  <title>Lista de admins</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div class="page-center">
+    <div class="container">
+
+      <h1>Admins</h1>
+
+      <a href="/register_adm" class="adicionar">Adicionar admin</a>
+
+      <ol class="crud">
+
+        {% for adm in adms %}
+
+        <li>
+          <p>{{adm[1]}}</p>
+          <a href="/update_adm/{{adm[0]}}">Atualizar</a>
+          <a href="/confirm_delete_adm/{{adm[0]}}">Remover</a>
+        </li>
+
+        {% endfor %}
+
+      </ol>
+
+      <a href="/home" class="voltar">voltar</a>
+
+    </div>
+  </div>
+
+</body>

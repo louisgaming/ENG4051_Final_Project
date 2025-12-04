@@ -1,0 +1,33 @@
+<head>
+  <title>Lista de produtos</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div class="page-center">
+    <div class="container">
+
+      <h1>Produtos</h1>
+
+      <a href="/register_prod" class="adicionar">Adicionar produto</a>
+
+      <ol class="crud">
+
+        {% for product in products %}
+
+        <li>
+          <p>{{product[1]}}</p>
+          <a href="/update_prod/{{product[0]}}">Atualizar</a>
+          <a href="/confirm_delete_prod/{{product[0]}}">Remover</a>
+        </li>
+
+        {% endfor %}
+
+      </ol>
+
+      <a href="/home" class="voltar">voltar</a>
+
+    </div>
+  </div>
+
+</body>

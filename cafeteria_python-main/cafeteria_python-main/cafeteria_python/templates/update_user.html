@@ -1,0 +1,32 @@
+<head>
+  <title>Atualizar usuario</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div class="page-center">
+    <div class="home-container">
+
+      <h1>Atualizar usuario</h1>
+      <form method="post">
+        <div>
+          <label>nome</label>
+          <input id="name" name = "name" value="{{name}}">
+        </div>
+
+        <div>
+          <label>rfid</label>
+          <input id="rfid" name = "rfid" value="{{rfid}}">
+        </div>
+
+        <div>
+          <label>balanço</label>
+          <input id="balance" name="balance" value="{{balance}}">
+        </div>
+
+        <button type="submit">Update</button>
+      </form>
+      <a href="/list_user">voltar</a>
+    </div>
+  </div>
+</body>

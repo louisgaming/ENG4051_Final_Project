@@ -1,0 +1,36 @@
+<head>
+  <title>Adicionar produto</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div class="page-center">
+    <div class="home-container">
+
+      <h1>Adicionar produto</h1>
+      <form method="post">
+        <div>
+          <label>nome</label>
+          <input id="nome" name = "nome">
+        </div>
+        
+        <div>
+          <label>preço / 100g</label>
+          <input id="preco_100g" name="preco_100g">
+        </div>
+
+        <div>
+          <label>tipo de maquina</label>
+          <select id='maquina' name="maquina">
+            <option value="S">solido</option>
+            <option value="L">liquido</option>
+          </select>
+        </div>
+
+        <button type="submit">Register</button>
+    </form>
+    <a href="/list_prod">voltar</a>
+
+    </div>
+  </div>
+</body>
